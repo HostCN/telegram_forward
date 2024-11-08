@@ -6,54 +6,10 @@ from telethon.sessions import StringSession
 from telethon import events
 import os
 import sys
-import psutil
 import atexit
 from time import sleep
 
-# 锁文件路径
 LOCK_FILE = "/tmp/telegram_forward.lock"
-PROCESSED_MESSAGES_FILE = "processed_messages.json"
-API_ID = api
-API_HASH = 'api'
-SESSION_STRING = 'api'
-SOURCE_CHANNEL_IDS = ['@zxtspd', '@vpscang']
-TARGET_CHANNEL_ID = '@hostzg'
-KEYWORDS = ["2024", "DMIT"]
-
-# 检查是否已经有实例运行
-def check_process():
-    current_pid = os.getpid()
-    for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
-        if proc.info['name'] == 'python3' and 'telegram_forward.py' in proc.info['cmdline']:
-            # 如果进程不是当前进程，则结束它
-            if proc.info['pid'] != current_pid:
-                print(f"找到正在运行的进程: {proc.info['pid']}，准备终止它")
-                proc.terminate()
-                proc.wait()
-
-# 检查并创建锁文件
-if os.path.exists(LOCK_FILE):
-    print("脚本已在运行，退出。")
-    sys.exit(0)
-else:
-    open(LOCK_FILE, "w").close()
-
-# 注册程序退出时删除锁文件
-def cleanup():
-    if os.path.exists(LOCK_FILE):
-        os.remove(LOCK_FILE)
-
-atexit.register(cleanup)
-
-# 在开始时检查并终止多余的进程
-check_process()
-
-# 加载已处理消息的 ID
-if os.path.exists(PROCESSED_MESSAGES_FILE):
-    with open(PROCESSED_MESSAGES_FILE, "r") as file:
-        processed_messages = set(json.load(file))
-else:
-    processed_messages = set()
 
 # 配置日志
 logging.basicConfig(
@@ -65,10 +21,26 @@ logging.basicConfig(
     ]
 )
 
+API_ID = API_ID # 环境变量名为 API_ID
+API_HASH = 'API_HASH' # 环境变量名为 'API_HASH'
+SESSION_STRING = 'SESSION_STRING' # 环境变量名为 'SESSION_STRING'
+
+SOURCE_CHANNEL_IDS = ['@zxtspd', '@vpscang']
+TARGET_CHANNEL_ID = '@hostzg'
+KEYWORDS = ["2024", "DMIT"]
+PROCESSED_MESSAGES_FILE = "processed_messages.json"
+
+# 加载已处理消息的 ID
+if os.path.exists(PROCESSED_MESSAGES_FILE):
+    with open(PROCESSED_MESSAGES_FILE, "r") as file:
+        processed_messages = set(json.load(file))
+else:
+    processed_messages = set()
+
 async def main():
-    # 初始化 Telegram 客户端
+    # 使用 async with 启动 Telegram 客户端
     async with TelegramClient(StringSession(SESSION_STRING), API_ID, API_HASH) as client:
-        
+
         @client.on(events.NewMessage(chats=SOURCE_CHANNEL_IDS))
         async def handler(event):
             message = event.message
@@ -94,7 +66,7 @@ async def main():
                         with open(PROCESSED_MESSAGES_FILE, "w") as file:
                             json.dump(list(processed_messages), file)
                         
-                        await asyncio.sleep(1)  # 延迟1秒防止请求过多
+                        await asyncio.sleep(3)  # 延迟3秒防止请求过多
 
                     except Exception as e:
                         logging.error(f"转发消息失败: {e}")
@@ -104,6 +76,5 @@ async def main():
         logging.info("消息转发已启动，等待消息...")
         await client.run_until_disconnected()
 
-# 运行主函数
-if __name__ == "__main__":
+if __name__ == '__main__':
     asyncio.run(main())

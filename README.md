@@ -84,15 +84,12 @@ source venv/bin/activate
 
 --------------------------------------------------------------------------------------------------------
 
-在宝塔面板（BT Panel）中安装和运行这个 Telegram 消息转发脚本涉及以下步骤：
+运行这个 Telegram 消息转发脚本涉及以下步骤：
 
 ### 一、环境准备
 
-1. **登录宝塔面板**  
-   打开宝塔面板的后台，登录管理界面。
-
 2. **安装 Python 环境**  
-   确保系统已经安装了 Python （通常是 Python 3.x）。
+   上步已经完成安装，确保系统已经安装了 Python （通常是 Python 3.x）。
 
 3. **创建项目目录**  
    在宝塔面板的文件管理器或通过 SSH 登录服务器，创建一个目录来存放 Telegram 脚本文件。例如，可以创建目录 `/www/telegram_forward`：
@@ -114,11 +111,10 @@ source venv/bin/activate
    cd /www/telegram_forward
    ```
 
-3. **创建虚拟环境（可选，但推荐）**  
-   创建一个 Python 虚拟环境，以便管理依赖：
+3. **进入虚拟环境**  
+   Python 虚拟环境：
 
    ```bash
-   python3 -m venv venv
    source venv/bin/activate
    ```
 
@@ -139,14 +135,19 @@ source venv/bin/activate
 
    在宝塔面板中编辑 `telegram_forward.py` 文件，确保填入 `API_ID`、`API_HASH`、`SOURCE_CHANNEL_ID`、`TARGET_CHANNEL_ID` 等信息。
 
-### 四、在宝塔中配置任务运行脚本
+### 四、运行脚本
 
-1. **进入宝塔的“计划任务”**  
+1. **终端直接运行**
+   
+   ```bash
+     cd /www/telegram_forward
+     source venv/bin/activate
+     nohup python3 telegram_forward.py > output.log
+     ```
+
+2. **宝塔的“计划任务”运行（推荐方便后期如更改代码后重启新脚本）**  
    在宝塔面板左侧找到“计划任务”，点击进入。
-
-2. **新建计划任务**  
    点击“添加任务”，在任务类型中选择“Shell 脚本”，并设置以下内容：
-
    - **任务名称**：可以设置为 `Telegram消息转发脚本`
    - **执行周期**：添加后只需执行一次即可，方便后期如更改代码后重启新脚本
    - **脚本内容**：填写启动 Python 脚本的命令。注意，如果使用了虚拟环境，请确保激活虚拟环境后再运行脚本：
@@ -158,8 +159,6 @@ source venv/bin/activate
      ```
 
    上述命令会进入项目目录、激活虚拟环境，并以后台方式运行脚本，同时将输出记录到 `output.log` 文件中。
-
-3. **保存任务并运行**  
    保存并运行任务一次即可，查看是否成功启动脚本。
 
 ### 五、查看脚本是否正常运行
@@ -195,6 +194,7 @@ source venv/bin/activate
 完成这些步骤后，你就能在宝塔面板中运行并管理 Telegram 转发脚本了。
 
 --------------------------------------------------------------------------------------------------------
+
 # 生成StringSession
 
 为了确保你的脚本可以在无交互环境中自动登录使用 `StringSession`
@@ -224,44 +224,3 @@ with TelegramClient(StringSession(), API_ID, API_HASH) as client:
 ```
 
 执行该脚本后，会在控制台打印出一个 `Session String`。将该字符串保存下来，用于服务器上的脚本。
-
-------------------------------------------------------
-
-# 更改代码后需要重新启动脚本
-
-### 为什么需要重启：
-- 代码的修改（例如更改延迟时间）会影响程序的执行流程。在脚本运行时，它会按照原来的逻辑执行，而新的更改只有在程序重新启动后才会生效。
-  
-### 如何重启脚本：
-1. **终止当前脚本**：
-   - 如果你知道脚本的进程 ID，可以使用 `kill` 命令终止进程。
-   - 例如，使用 `ps aux | grep telegram_forward.py` 查找进程 ID，然后使用 `kill <PID>` 停止进程。
-
-2. **重新运行脚本**：
-   - 停止当前脚本后，运行修改后的脚本：
-     ```bash
-     python3 telegram_forward.py
-     ```
-
-### 示例：
-如果你修改了延迟时间：
-```python
-await asyncio.sleep(3)  # 延迟3秒
-```
-保存后，重新启动脚本：
-1. 查找当前进程：
-   ```bash
-   ps aux | grep telegram_forward.py
-   ```
-
-2. 终止进程：
-   ```bash
-   kill <PID>  # 用实际的PID替换
-   ```
-
-3. 在项目中重新运行脚本：
-   ```bash
-   python3 telegram_forward.py
-   ```
-
-重启后，脚本将按新的逻辑执行（包括延迟3秒的修改）。

@@ -70,7 +70,7 @@ sudo yum install python3
 ### 三、编写脚本文件
 
 1. **创建 Python 脚本文件**  
-   在项目目录 `/www/telegram_forward` 中创建一个 Python 文件，例如 `telegram_forward.py`。可以在宝塔面板的文件管理器中右键点击“新建文件”。
+   项目目录 `/www/telegram_forward` 中创建一个 Python 文件，例如 `telegram_forward.py`。可以在宝塔面板的文件管理器中右键点击“新建文件”。
 
 2. **粘贴脚本代码**  
    将之前的 Telegram 转发代码粘贴到 `telegram_forward.py` 文件中，并保存。

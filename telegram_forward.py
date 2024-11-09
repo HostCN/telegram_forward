@@ -5,11 +5,6 @@ from telethon.sync import TelegramClient
 from telethon.sessions import StringSession
 from telethon import events
 import os
-import sys
-import atexit
-from time import sleep
-
-LOCK_FILE = "/tmp/telegram_forward.lock"
 
 # 配置日志
 logging.basicConfig(
@@ -21,16 +16,16 @@ logging.basicConfig(
     ]
 )
 
+# Telegram API 配置信息
 API_ID = API_ID # 环境变量名为 API_ID
 API_HASH = 'API_HASH' # 环境变量名为 'API_HASH'
 SESSION_STRING = 'SESSION_STRING' # 环境变量名为 'SESSION_STRING'
 
 SOURCE_CHANNEL_IDS = ['@zxtspd', '@vpscang']
 TARGET_CHANNEL_ID = '@hostzg'
-KEYWORDS = ["2024", "DMIT"]
 PROCESSED_MESSAGES_FILE = "processed_messages.json"
 
-# 加载已处理消息的 ID
+# 加载已处理的消息 ID
 if os.path.exists(PROCESSED_MESSAGES_FILE):
     with open(PROCESSED_MESSAGES_FILE, "r") as file:
         processed_messages = set(json.load(file))
@@ -45,8 +40,8 @@ async def main():
         async def handler(event):
             message = event.message
 
-            # 检查消息 ID 是否已处理，避免重复转发
-            if message.id not in processed_messages and any(keyword in message.text for keyword in KEYWORDS):
+            # 检查消息是否未处理过，避免重复转发
+            if message.id not in processed_messages:
                 if "https://my.racknerd.com/cart.php?a=add" in message.text or "https://www.dmit.io/aff.php?aff=184" in message.text:
                     modified_message = message.text.replace(
                         "https://my.racknerd.com/cart.php?a=add", 

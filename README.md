@@ -28,6 +28,18 @@ sudo yum install python3
    mkdir /www/telegram_forward
    cd /www/telegram_forward
    ```
+4. **创建虚拟环境**（如果还没有创建）：
+   ```bash
+   python3 -m venv venv
+   ```
+
+   这条命令会在当前目录下创建一个名为 `venv` 的文件夹，其中包含虚拟环境。如果你想把虚拟环境放在其他位置，可以指定路径，比如 `python3 -m venv /path/to/venv`。
+
+5. **激活虚拟环境**：
+   创建完成后，可以用以下命令激活虚拟环境：
+   ```bash
+   source venv/bin/activate
+   ```
 
 ### 二、安装 Telethon 库
 

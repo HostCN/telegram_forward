@@ -259,7 +259,7 @@ await asyncio.sleep(3)  # 延迟3秒
    kill <PID>  # 用实际的PID替换
    ```
 
-3. 重新运行脚本：
+3. 在项目中重新运行脚本：
    ```bash
    python3 telegram_forward.py
    ```

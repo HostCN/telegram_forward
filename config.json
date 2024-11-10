@@ -1,0 +1,19 @@
+{
+    "api_id": 123456,
+    "api_hash": "your_api_hash",
+    "session_string": "your_session_string",
+    "source_channel_ids": [
+        123456789,
+        987654321
+    ],
+    "target_channel_ids": [
+        1122334455,
+        2233445566,
+        3344556677
+    ],
+    "delay": 3,
+    "link_replacements": {
+        "https://my.racknerd.com/cart.php?a=add": "https://newlink1.com",
+        "https://www.dmit.io/aff.php?aff=184": "https://newlink2.com"
+    }
+}

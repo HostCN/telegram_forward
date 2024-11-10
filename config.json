@@ -13,7 +13,7 @@
     ],
     "delay": 3,
     "link_replacements": {
-        "https://my.racknerd.com/cart.php?a=add": "https://newlink1.com",
-        "https://www.dmit.io/aff.php?aff=184": "https://newlink2.com"
+        "https://my\\.racknerd\\.com/aff\\.php\\?aff=\\d+": "https://my.racknerd.com/aff.php?aff=112",
+        "https://my\\.racknerd\\.com/cart\\.php\\?a=add": "https://my.racknerd.com/aff.php?aff=112"
     }
 }

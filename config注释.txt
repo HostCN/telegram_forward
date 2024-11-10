@@ -12,7 +12,9 @@
     ],
     "delay": 3,  // 转发消息时的延迟（秒），防止请求过于频繁导致 Telegram API 限制
     "link_replacements": {
-        "https://my.racknerd.com/cart.php?a=add": "https://替换链接1.com",  // 如果消息包含该链接，将其替换为新链接
-        "https://www.dmit.io/aff.php?aff=184": "https://替换链接2.com"  // 另一个示例链接替换
+        "https://my\\.racknerd\\.com/aff\\.php\\?aff=\\d+": "https://my.racknerd.com/aff.php?aff=112",  // 如果消息包含该链接，aff值为任意数字组，将其替换为新链接
+        "https://my\\.racknerd\\.com/cart\\.php\\?a=add": "https://my.racknerd.com/aff.php?aff=112"  // 另一个示例链接替换
     }
 }
+
+        

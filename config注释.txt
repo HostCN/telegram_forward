@@ -3,7 +3,7 @@
     "api_hash": "your_api_hash",  // Telegram API HASH，获取方式见https://my.telegram.org/auth
     "session_string": "your_session_string",  // 会话字符串，生成方法可以参考Telethon库的文档
     "source_channel_ids": [
-        123456789,  // 源频道 ID 列表，转发来自这些频道的消息
+        123456789,  // 源频道 ID 列表，转发来自这些频道的消息，也可使用"@频道链接"
         987654321   // 你可以在此添加多个源频道 ID
     ],
     "target_channel_ids": [

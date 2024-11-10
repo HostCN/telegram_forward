@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 import os
+import re
 import time
 from telethon import events
 from telethon.sync import TelegramClient
@@ -9,7 +10,7 @@ from telethon.sessions import StringSession
 
 # 配置日志
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.DEBUG,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
         logging.StreamHandler(),
@@ -35,7 +36,7 @@ TARGET_CHANNEL_IDS = config["target_channel_ids"]
 DELAY = config.get("delay", 3)
 LINK_REPLACEMENTS = config.get("link_replacements", {})
 
-# 已处理消息文件路径
+# 已处理消息文件
 PROCESSED_MESSAGES_FILE = "processed_messages.json"
 SAVE_INTERVAL = 60
 last_save_time = time.time()
@@ -57,37 +58,42 @@ async def main():
 
             # 检查是否已处理，避免重复转发
             if message.id not in processed_messages:
-                modified_message = message.text
+                original_message = message.text
+                modified_message = original_message
 
-                # 判断消息中是否包含需要替换的链接
-                for target_link, replacement_link in LINK_REPLACEMENTS.items():
-                    modified_message = modified_message.replace(target_link, replacement_link)
+                # 查找并替换链接
+                for pattern, replacement in LINK_REPLACEMENTS.items():
+                    modified_message = re.sub(pattern, replacement, modified_message)
 
-                # 尝试转发到多个目标频道
-                for target_channel in TARGET_CHANNEL_IDS:
-                    try:
-                        await client.send_message(target_channel, modified_message)
-                        logging.info(f"成功转发消息到目标频道: {target_channel}")
-                    except Exception as e:
-                        logging.error(f"转发消息失败到频道 {target_channel}: {e}")
-                        if "429" in str(e):  # 处理请求频率过高的错误
-                            await asyncio.sleep(5)
+                # 检查是否发生了替换
+                if modified_message != original_message:
+                    logging.debug(f"替换后的消息: {modified_message}")
 
-                # 标记已处理的消息
-                processed_messages.add(message.id)
+                    # 尝试转发到多个目标频道
+                    for target_channel in TARGET_CHANNEL_IDS:
+                        try:
+                            await client.send_message(target_channel, modified_message)
+                            logging.info(f"成功转发消息到目标频道: {target_channel}")
+                        except Exception as e:
+                            logging.error(f"转发消息失败到频道 {target_channel}: {e}")
+                            if "429" in str(e):  # 处理请求频率过高的错误
+                                await asyncio.sleep(5)
 
-                # 定期保存已处理的消息
-                global last_save_time
-                if time.time() - last_save_time > SAVE_INTERVAL:
-                    try:
-                        with open(PROCESSED_MESSAGES_FILE, "w") as file:
-                            json.dump(list(processed_messages), file)
-                        last_save_time = time.time()
-                    except Exception as e:
-                        logging.error(f"保存已处理消息文件失败: {e}")
+                    # 标记已处理的消息
+                    processed_messages.add(message.id)
+                
+                    # 定期保存已处理的消息
+                    global last_save_time
+                    if time.time() - last_save_time > SAVE_INTERVAL:
+                        try:
+                            with open(PROCESSED_MESSAGES_FILE, "w") as file:
+                                json.dump(list(processed_messages), file)
+                            last_save_time = time.time()
+                        except Exception as e:
+                            logging.error(f"保存已处理消息文件失败: {e}")
 
-                # 动态延迟
-                await asyncio.sleep(DELAY)
+                    # 动态延迟
+                    await asyncio.sleep(DELAY)
 
         logging.info("消息转发已启动，等待消息...")
         await client.run_until_disconnected()

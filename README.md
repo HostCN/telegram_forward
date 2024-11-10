@@ -129,8 +129,13 @@ sudo yum install python3
    ```bash
    kill -9 <进程ID>
    ```
-
-2. **调整脚本配置**  
+   或终止所有telegram_forward.py进程：
+   
+   ```bash
+   pkill -f telegram_forward.py
+   ```
+   
+3. **调整脚本配置**  
    若需要调整关键词或替换规则，直接在宝塔面板的文件管理器中编辑 `telegram_forward.py` 文件，并重新启动脚本。
 
 完成这些步骤后，你就能在宝塔面板中运行并管理 Telegram 转发脚本了。

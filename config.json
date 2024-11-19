@@ -14,6 +14,12 @@
     "delay": 3,
     "link_replacements": {
         "https://my\\.racknerd\\.com/aff\\.php\\?aff=\\d+": "https://my.racknerd.com/aff.php?aff=112",
-        "https://my\\.racknerd\\.com/cart\\.php\\?a=add": "https://my.racknerd.com/aff.php?aff=112"
+        "https://my\\.racknerd\\.com/cart\\.php\\?a=add": "https://my.racknerd.com/aff.php?aff=112",
+        "https://www\\.dmit\\.io/aff\\.php\\?aff=\\d+": "https://www.dmit.io/aff.php?aff=785",
+        "https://www\\.dmit\\.io/cart\\.php\\?a=add": "https://www.dmit.io/aff.php?aff=785",
+        "https://bwh81\\.net/aff\\.php\\?aff=\\d+": "https://bwh81.net/aff.php?aff=55580",
+        "https://bwh81\\.net/cart\\.php\\?a=add": "https://bwh81.net/aff.php?aff=55580",
+        "https://www.bandwagonhost.net/716.html": "https://hostzg.com/5174.html",
+        "https://stock.bwg.net":  "https://vpsk.top"
     }
 }

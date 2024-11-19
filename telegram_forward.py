@@ -72,7 +72,7 @@ async def main():
                     # 尝试转发到多个目标频道
                     for target_channel in TARGET_CHANNEL_IDS:
                         try:
-                            await client.send_message(target_channel, modified_message)
+                            await client.send_message(target_channel, modified_message, link_preview=False)
                             logging.info(f"成功转发消息到目标频道: {target_channel}")
                         except Exception as e:
                             logging.error(f"转发消息失败到频道 {target_channel}: {e}")

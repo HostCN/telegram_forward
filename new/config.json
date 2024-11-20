@@ -1,0 +1,44 @@
+{
+    "api_id": 000000,
+    "api_hash": "000000",
+    "session_string": "000000",
+    "source_channel_ids": [
+        "@zxtspd",
+        "@BandwagonHostNews",
+        "@vpscang",
+        "@racknerd_promo"
+    ],
+    "target_channel_ids": [
+        "@hostzg_vps"
+    ],
+    "delay": 3,
+    "link_replacements": {
+        "https://my\\.racknerd\\.com/aff\\.php\\?aff=\\d+": "https://my.racknerd.com/aff.php?aff=112",
+        "https://my\\.racknerd\\.com/cart\\.php\\?a=add": "https://my.racknerd.com/aff.php?aff=112",
+        "https://www\\.dmit\\.io/aff\\.php\\?aff=\\d+": "https://www.dmit.io/aff.php?aff=785",
+        "https://www\\.dmit\\.io/cart\\.php\\?a=add": "https://www.dmit.io/aff.php?aff=785",
+        "https://bwh81\\.net/cart\\.php\\?a=add": "https://bwh81.net/aff.php?aff=55580"
+    },
+    "conditional_replacements": [
+        {
+            "keywords": ["方案上新", "方案补货"],
+            "rules": [
+                {
+                    "pattern": "https://www.bandwagonhost.net/716.html",
+                    "replacement": "https://hostzg.com/5174.html",
+                    "is_regex": true
+                },
+                {
+                    "pattern": "https://stock.bwg.net",
+                    "replacement": "https://vpsk.top",
+                    "is_regex": true
+                },
+                {
+                    "pattern": "https://bwh81.net/aff.php\\?aff=044",
+                    "replacement": "https://bwh81.net/aff.php?aff=55580",
+                    "is_regex": true
+                }
+            ]
+        }
+    ]
+}

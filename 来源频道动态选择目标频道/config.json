@@ -1,0 +1,21 @@
+{
+  "api_id": 123456,
+  "api_hash": "your_api_hash",
+  "session_string": "your_session_string",
+  "source_to_target_mapping": {
+    "-1001234567890": ["-1009876543210", "-1001231231231"],
+    "-1002345678901": ["-1008765432109"]
+  },
+  "delay": 3,
+  "link_replacements": {
+    "old-link.com": "new-link.com"
+  },
+  "conditional_replacements": [
+    {
+      "keywords": ["special"],
+      "rules": [
+        {"pattern": "old", "replacement": "new", "is_regex": false}
+      ]
+    }
+  ]
+}
